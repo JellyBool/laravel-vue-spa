@@ -8350,3 +8350,12 @@ button.close {
   }
 }
 
+.bs-callout h4 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.bs-callout-danger h4 {
+  color: #ce4844;
+}
+
