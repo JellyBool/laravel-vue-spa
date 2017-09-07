@@ -9,7 +9,7 @@ class PostsController extends Controller
 {
     public function index()
     {
-        return Post::paginate(7);
+        return Post::paginate(5);
     }
 
     public function show(Post $post)
