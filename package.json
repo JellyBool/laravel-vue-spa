@@ -19,6 +19,7 @@
         "vue": "^2.1.10"
     },
     "dependencies": {
+        "vee-validate": "^2.0.0-rc.14",
         "vue-router": "^2.7.0"
     }
 }
