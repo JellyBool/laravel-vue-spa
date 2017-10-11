@@ -8,6 +8,9 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <ul class="nav navbar-nav"></ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <router-link to="/login" tag="li">
+                        <a>登录</a>
+                    </router-link>
                     <router-link to="/register" tag="li">
                         <a>注册</a>
                     </router-link>
