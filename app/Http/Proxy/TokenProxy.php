@@ -24,7 +24,7 @@ class TokenProxy {
                 'scope' => ''
             ]);
         }
-        
+
         return response()->json([
             'status' => false,
             'message' => 'Credentials not match'
