@@ -1,4 +1,3 @@
-
 require('./bootstrap');
 
 window.Vue = require('vue');
@@ -10,11 +9,11 @@ import jwtToken from './helpers/jwt'
 import App from './components/App'
 
 import zh_CN from './locale/zh_CN';
-import VeeValidate, { Validator } from 'vee-validate';
+import VeeValidate, {Validator} from 'vee-validate';
 
 axios.interceptors.request.use(function (config) {
-    if(jwtToken.getToken()) {
-        config.headers['Authorization'] = 'Bearer '+ jwtToken.getToken();
+    if (jwtToken.getToken()) {
+        config.headers['Authorization'] = 'Bearer ' + jwtToken.getToken();
     }
     return config;
 }, function (error) {
@@ -31,9 +30,9 @@ Vue.use(VeeValidate, {
     locale: 'zh_CN'
 });
 
-Vue.component('app',App)
+Vue.component('app', App)
 
- new Vue({
+new Vue({
     el: '#app',
     router,
     store
