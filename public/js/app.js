@@ -45380,6 +45380,7 @@ module.exports = function spread(callback) {
 
 var routes = [{
     path: '/',
+    name: 'home',
     component: __webpack_require__(45),
     meta: {}
 }, {
@@ -45395,12 +45396,12 @@ var routes = [{
     path: '/register',
     name: 'register',
     component: __webpack_require__(57),
-    meta: {}
+    meta: { requiresGuest: true }
 }, {
     path: '/login',
     name: 'login',
     component: __webpack_require__(63),
-    meta: {}
+    meta: { requiresGuest: true }
 }, {
     path: '/confirm',
     name: 'confirm',
@@ -45424,6 +45425,13 @@ router.beforeEach(function (to, from, next) {
             return next();
         } else {
             return next({ 'name': 'login' });
+        }
+    }
+    if (to.meta.requiresGuest) {
+        if (__WEBPACK_IMPORTED_MODULE_1__store_index__["a" /* default */].state.authenticated || __WEBPACK_IMPORTED_MODULE_2__helpers_jwt__["a" /* default */].getToken()) {
+            return next({ 'name': 'home' });
+        } else {
+            return next();
         }
     }
     next();
@@ -46482,6 +46490,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
@@ -46494,12 +46503,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         login: function login() {
             var _this = this;
 
-            var formData = {
-                email: this.email,
-                password: this.password
-            };
-            this.$store.dispatch('loginRequest', formData).then(function (response) {
-                _this.$router.push({ name: 'profile' });
+            this.$validator.validateAll().then(function (result) {
+                if (result) {
+                    var formData = {
+                        email: _this.email,
+                        password: _this.password
+                    };
+                    _this.$store.dispatch('loginRequest', formData).then(function (response) {
+                        _this.$router.push({ name: 'profile' });
+                    });
+                }
+                //
             });
         }
     }
@@ -46900,6 +46914,7 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common_TopMenu__ = __webpack_require__(77);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common_TopMenu___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__common_TopMenu__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers_jwt__ = __webpack_require__(2);
 //
 //
 //
@@ -46909,9 +46924,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    created: function created() {
+        if (__WEBPACK_IMPORTED_MODULE_1__helpers_jwt__["a" /* default */].getToken()) {
+            this.$store.dispatch('setAuthUser');
+        }
+    },
+
     components: {
         TopMenu: __WEBPACK_IMPORTED_MODULE_0__common_TopMenu___default.a
     }
