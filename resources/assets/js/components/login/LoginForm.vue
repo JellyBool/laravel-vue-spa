@@ -34,18 +34,18 @@
     export default {
         data() {
             return {
-                email : '',
-                password : ''
+                email: '',
+                password: ''
             }
         },
-        methods:{
+        methods: {
             login() {
                 let formData = {
-                    email : this.email,
-                    password : this.password
+                    email: this.email,
+                    password: this.password
                 }
-                this.$store.dispatch('loginRequest',formData).then(response => {
-                    this.$router.push({name:'profile'})
+                this.$store.dispatch('loginRequest', formData).then(response => {
+                    this.$router.push({name: 'profile'})
                 })
             }
         }

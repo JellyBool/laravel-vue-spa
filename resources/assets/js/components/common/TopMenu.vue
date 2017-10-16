@@ -17,9 +17,9 @@
                     <router-link v-if="user.authenticated" to="/profile" tag="li">
                         <a>个人中心</a>
                     </router-link>
-                    <li v-if="user.authenticated">
-                        <a href="#" >退出</a>
-                    </li>
+                    <router-link v-if="user.authenticated" to="#" tag="li">
+                        <a>退出</a>
+                    </router-link>
                 </ul>
             </div>
         </div>
