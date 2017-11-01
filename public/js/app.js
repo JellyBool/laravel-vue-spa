@@ -45421,14 +45421,14 @@ var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
 
 router.beforeEach(function (to, from, next) {
     if (to.meta.requiresAuth) {
-        if (__WEBPACK_IMPORTED_MODULE_1__store_index__["a" /* default */].state.authenticated || __WEBPACK_IMPORTED_MODULE_2__helpers_jwt__["a" /* default */].getToken()) {
+        if (__WEBPACK_IMPORTED_MODULE_1__store_index__["a" /* default */].state.AuthUser.authenticated || __WEBPACK_IMPORTED_MODULE_2__helpers_jwt__["a" /* default */].getToken()) {
             return next();
         } else {
             return next({ 'name': 'login' });
         }
     }
     if (to.meta.requiresGuest) {
-        if (__WEBPACK_IMPORTED_MODULE_1__store_index__["a" /* default */].state.authenticated || __WEBPACK_IMPORTED_MODULE_2__helpers_jwt__["a" /* default */].getToken()) {
+        if (__WEBPACK_IMPORTED_MODULE_1__store_index__["a" /* default */].state.AuthUser.authenticated || __WEBPACK_IMPORTED_MODULE_2__helpers_jwt__["a" /* default */].getToken()) {
             return next({ 'name': 'home' });
         } else {
             return next();

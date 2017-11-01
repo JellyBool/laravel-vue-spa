@@ -53,14 +53,14 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth) {
-        if (Store.state.authenticated || jwtToken.getToken()) {
+        if (Store.state.AuthUser.authenticated || jwtToken.getToken()) {
             return next()
         } else {
             return next({'name': 'login'})
         }
     }
     if (to.meta.requiresGuest) {
-        if (Store.state.authenticated || jwtToken.getToken()) {
+        if (Store.state.AuthUser.authenticated || jwtToken.getToken()) {
             return next({'name': 'home'})
         } else {
             return next()
