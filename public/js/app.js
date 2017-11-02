@@ -45445,6 +45445,8 @@ router.beforeEach(function (to, from, next) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mutation_type__ = __webpack_require__(43);
+var _mutations;
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
@@ -45455,21 +45457,32 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         name: null,
         email: null
     },
-    mutations: _defineProperty({}, __WEBPACK_IMPORTED_MODULE_0__mutation_type__["a" /* SET_AUTH_USER */], function (state, payload) {
+    mutations: (_mutations = {}, _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_type__["a" /* SET_AUTH_USER */], function (state, payload) {
         state.authenticated = true;
         state.name = payload.user.name;
         state.email = payload.user.email;
-    }),
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_type__["b" /* UNSET_AUTH_USER */], function (state) {
+        state.authenticated = false;
+        state.name = null;
+        state.email = null;
+    }), _mutations),
     actions: {
         setAuthUser: function setAuthUser(_ref) {
             var commit = _ref.commit,
                 dispatch = _ref.dispatch;
 
-            axios.get('/api/user').then(function (response) {
+            return axios.get('/api/user').then(function (response) {
                 commit({
                     type: __WEBPACK_IMPORTED_MODULE_0__mutation_type__["a" /* SET_AUTH_USER */],
                     user: response.data
                 });
+            });
+        },
+        unsetAuthUser: function unsetAuthUser(_ref2) {
+            var commit = _ref2.commit;
+
+            commit({
+                type: __WEBPACK_IMPORTED_MODULE_0__mutation_type__["b" /* UNSET_AUTH_USER */]
             });
         }
     }
@@ -45481,7 +45494,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SET_AUTH_USER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return UNSET_AUTH_USER; });
 var SET_AUTH_USER = 'SET_AUTH_USER';
+var UNSET_AUTH_USER = 'UNSET_AUTH_USER';
 
 /***/ }),
 /* 44 */
@@ -45496,11 +45511,19 @@ var SET_AUTH_USER = 'SET_AUTH_USER';
         loginRequest: function loginRequest(_ref, formData) {
             var dispatch = _ref.dispatch;
 
-            axios.post('/api/login', formData).then(function (response) {
+            return axios.post('/api/login', formData).then(function (response) {
                 __WEBPACK_IMPORTED_MODULE_0__helpers_jwt__["a" /* default */].setToken(response.data.token);
                 dispatch('setAuthUser');
             }).catch(function (error) {
                 console.log(error.response.data);
+            });
+        },
+        logoutRequest: function logoutRequest(_ref2) {
+            var dispatch = _ref2.dispatch;
+
+            return axios.post('/api/logout').then(function (response) {
+                __WEBPACK_IMPORTED_MODULE_0__helpers_jwt__["a" /* default */].removeToken();
+                dispatch('unsetAuthUser');
             });
         }
     }
@@ -47024,7 +47047,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         user: function user(state) {
             return state.AuthUser;
         }
-    }))
+    })),
+    methods: {
+        logout: function logout() {
+            var _this = this;
+
+            this.$store.dispatch('logoutRequest').then(function (response) {
+                _this.$router.push({ name: 'home' });
+            });
+        }
+    }
 });
 
 /***/ }),
@@ -47068,12 +47100,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "to": "/profile",
       "tag": "li"
     }
-  }, [_c('a', [_vm._v("个人中心")])]) : _vm._e(), _vm._v(" "), (_vm.user.authenticated) ? _c('router-link', {
+  }, [_c('a', [_vm._v("个人中心")])]) : _vm._e(), _vm._v(" "), (_vm.user.authenticated) ? _c('li', [_c('a', {
     attrs: {
-      "to": "#",
-      "tag": "li"
+      "href": "#"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.logout($event)
+      }
     }
-  }, [_c('a', [_vm._v("退出")])]) : _vm._e()], 1)])])])
+  }, [_vm._v("退出")])]) : _vm._e()], 1)])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('button', {
     staticClass: "navbar-toggle collapsed",
