@@ -45514,8 +45514,6 @@ var UNSET_AUTH_USER = 'UNSET_AUTH_USER';
             return axios.post('/api/login', formData).then(function (response) {
                 __WEBPACK_IMPORTED_MODULE_0__helpers_jwt__["a" /* default */].setToken(response.data.token);
                 dispatch('setAuthUser');
-            }).catch(function (error) {
-                console.log(error.response.data);
             });
         },
         logoutRequest: function logoutRequest(_ref2) {
@@ -46480,6 +46478,8 @@ module.exports = Component.exports
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_jwt__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vee_validate__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vee_validate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vee_validate__);
 //
 //
 //
@@ -46511,6 +46511,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+
 
 
 
@@ -46518,10 +46520,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             email: '',
-            password: ''
+            password: '',
+            bag: new __WEBPACK_IMPORTED_MODULE_1_vee_validate__["ErrorBag"]()
         };
     },
 
+    computed: {
+        mismatchError: function mismatchError() {
+            return this.bag.has('password:auth') && !this.errors.has('password');
+        }
+    },
     methods: {
         login: function login() {
             var _this = this;
@@ -46534,6 +46542,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     };
                     _this.$store.dispatch('loginRequest', formData).then(function (response) {
                         _this.$router.push({ name: 'profile' });
+                    }).catch(function (error) {
+                        if (error.response.status === 421) {
+                            _this.bag.add('password', '邮箱和密码不相符', 'auth');
+                        }
                     });
                 }
                 //
@@ -46606,7 +46618,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v(_vm._s(_vm.errors.first('email')))])])]), _vm._v(" "), _c('div', {
     staticClass: "form-group",
     class: {
-      'has-error': _vm.errors.has('password')
+      'has-error': _vm.errors.has('password') || _vm.bag.has('password:auth')
     }
   }, [_c('label', {
     staticClass: "col-md-3 control-label",
@@ -46651,7 +46663,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       expression: "errors.has('password')"
     }],
     staticClass: "help-block"
-  }, [_vm._v(_vm._s(_vm.errors.first('password')))])])]), _vm._v(" "), _vm._m(0)])
+  }, [_vm._v(_vm._s(_vm.errors.first('password')))]), _vm._v(" "), (_vm.mismatchError) ? _c('span', {
+    staticClass: "help-block"
+  }, [_vm._v(_vm._s(_vm.bag.first('password:auth')))]) : _vm._e()])]), _vm._v(" "), _vm._m(0)])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "form-group"
