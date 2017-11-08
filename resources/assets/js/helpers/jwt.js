@@ -9,6 +9,7 @@ export default {
     },
     removeToken() {
         window.localStorage.removeItem('jwt_token');
+        Cookie.remove('auth_id');
     },
     setAuthId(authId) {
        Cookie.set('auth_id',authId)

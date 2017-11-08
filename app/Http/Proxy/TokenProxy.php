@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Proxy;
 
 class TokenProxy {
@@ -15,34 +16,41 @@ class TokenProxy {
         $this->http = $http;
     }
 
-    public function login($email,$password)
+    public function login($email, $password)
     {
-        if(auth()->attempt(['email' => $email, 'password' => $password , 'is_active' => 1])) {
-            return $this->proxy('password',[
+        if (auth()->attempt(['email' => $email, 'password' => $password, 'is_active' => 1])) {
+            return $this->proxy('password', [
                 'username' => $email,
                 'password' => $password,
-                'scope' => ''
+                'scope'    => '',
             ]);
         }
 
         return response()->json([
-            'status' => false,
-            'message' => 'Credentials not match'
-        ],421);
+            'status'  => false,
+            'message' => 'Credentials not match',
+        ], 421);
     }
 
     public function refresh()
     {
         $refreshToken = request()->cookie('refreshToken');
 
-        return $this->proxy('refresh_token',[
-            'refresh_token' => $refreshToken
+        return $this->proxy('refresh_token', [
+            'refresh_token' => $refreshToken,
         ]);
     }
 
     public function logout()
     {
         $user = auth()->guard('api')->user();
+        if (is_null($user)) {
+            app('cookie')->queue(app('cookie')->forget('refreshToken'));
+
+            return response()->json([
+                'message' => 'Logout!',
+            ], 204);
+        }
 
         $accessToken = $user->token();
 
@@ -52,13 +60,13 @@ class TokenProxy {
                 'revoked' => true,
             ]);
 
-        app('cookie')->forget('refreshToken');
+        app('cookie')->queue(app('cookie')->forget('refreshToken'));
 
         $accessToken->revoke();
 
         return response()->json([
-            'message' => 'Logout!'
-        ],204);
+            'message' => 'Logout!',
+        ], 204);
 
     }
 
@@ -71,15 +79,15 @@ class TokenProxy {
         ]);
 
         $response = $this->http->post('http://vue-spa.dev/oauth/token', [
-            'form_params' => $data
+            'form_params' => $data,
         ]);
 
-        $token = json_decode((string) $response->getBody(),true);
+        $token = json_decode((string)$response->getBody(), true);
 
         return response()->json([
-            'token' => $token['access_token'],
-            'auth_id' => md5($token['refresh_token']),
-            'expires_in' => $token['expires_in']
+            'token'      => $token['access_token'],
+            'auth_id'    => md5($token['refresh_token']),
+            'expires_in' => $token['expires_in'],
         ])->cookie('refreshToken', $token['refresh_token'], 14400, null, null, false, true);
     }
 }
