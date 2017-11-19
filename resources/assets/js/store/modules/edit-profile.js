@@ -1,4 +1,3 @@
-import jwtToken from './../../helpers/jwt'
 
 export default {
     actions: {
