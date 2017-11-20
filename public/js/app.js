@@ -18386,6 +18386,8 @@ if (inBrowser && window.Vue) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_auth_user__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_login__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_edit_profile__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_edit_password__ = __webpack_require__(111);
+
 
 
 
@@ -18399,7 +18401,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
     modules: {
         AuthUser: __WEBPACK_IMPORTED_MODULE_2__modules_auth_user__["a" /* default */],
         Login: __WEBPACK_IMPORTED_MODULE_3__modules_login__["a" /* default */],
-        EditProfile: __WEBPACK_IMPORTED_MODULE_4__modules_edit_profile__["a" /* default */]
+        EditProfile: __WEBPACK_IMPORTED_MODULE_4__modules_edit_profile__["a" /* default */],
+        EditPassword: __WEBPACK_IMPORTED_MODULE_5__modules_edit_password__["a" /* default */]
     },
     strict: true
 }));
@@ -51703,11 +51706,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            password: ''
+            password: '',
+            password_confirmation: ''
         };
     },
 
-    methods: {}
+    methods: {
+        updatePassword: function updatePassword() {
+            var _this = this;
+
+            this.$validator.validateAll().then(function (result) {
+                if (result) {
+                    var formData = {
+                        password: _this.password
+                    };
+                    _this.$store.dispatch('updatePasswordRequest', formData).then(function (response) {
+                        // this.$router.push({name: 'profile'})
+                        console.log('Success!');
+                    }).catch(function (error) {
+                        //
+                    });
+                }
+                //
+            });
+        }
+    }
 });
 
 /***/ }),
@@ -51715,7 +51738,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('form', [_c('div', {
+  return _c('form', {
+    on: {
+      "submit": function($event) {
+        $event.preventDefault();
+        _vm.updatePassword($event)
+      }
+    }
+  }, [_c('div', {
     staticClass: "form-group",
     class: {
       'has-error': _vm.errors.has('password')
@@ -51804,7 +51834,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "type": "submit"
     }
-  }, [_vm._v("\n                跟新密码\n            ")])])])
+  }, [_vm._v("\n                更新密码\n            ")])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -52284,6 +52314,35 @@ var isDefinedGlobally = function isDefinedGlobally() {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 102 */,
+/* 103 */,
+/* 104 */,
+/* 105 */,
+/* 106 */,
+/* 107 */,
+/* 108 */,
+/* 109 */,
+/* 110 */,
+/* 111 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    actions: {
+        updatePasswordRequest: function updatePasswordRequest(_ref, formData) {
+            var dispatch = _ref.dispatch;
+
+            return axios.post('/api/user/password/update', formData).then(function (response) {
+                //
+            }).catch(function (errors) {
+                //
+            });
+        }
+    }
+});
 
 /***/ })
 /******/ ]);

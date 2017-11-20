@@ -1,5 +1,5 @@
 <template>
-    <form >
+    <form @submit.prevent="updatePassword">
         <div class="form-group" :class="{'has-error' : errors.has('password') }">
             <label for="password" class="control-label">密码</label>
                 <input v-model="password"
@@ -17,7 +17,7 @@
         <div class="form-group">
             <div class="col-md-6 col-md-offset-4">
                 <button type="submit" class="btn btn-primary">
-                    跟新密码
+                    更新密码
                 </button>
             </div>
         </div>
@@ -28,11 +28,27 @@
     export default {
         data() {
             return {
-                password : ''
+                password : '',
+                password_confirmation: ''
             }
         },
         methods:{
-
+            updatePassword() {
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        let formData = {
+                            password: this.password
+                        }
+                        this.$store.dispatch('updatePasswordRequest', formData).then(response => {
+                            // this.$router.push({name: 'profile'})
+                            console.log('Success!');
+                        }).catch(error => {
+                            //
+                        })
+                    }
+                    //
+                })
+            }
         }
     }
 </script>
